@@ -45,5 +45,11 @@ chown -R www-data:www-data /rtorrent
     sed -i '/allow 127.0.0.1/a allow '${AUTH_OFF}';' /etc/nginx/sites-enabled/default
 }
 
+# Use user supplied .rtorrent.rc if one is present in the /rtorrent/ directory
+if [ -f /rtorrent/.rtorrent.rc ]; then
+  rm -f /root/.rtorrent.rc
+  ln -s /rtorrent/.rtorrent.rc /root/.rtorrent.rc
+fi
+
 # Use s6 to supervise all services
 exec /usr/bin/s6-svscan -t0 /service
